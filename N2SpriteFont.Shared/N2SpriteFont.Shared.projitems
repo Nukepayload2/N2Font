@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <MSBuildAllProjects>$(MSBuildAllProjects);$(MSBuildThisFileFullPath)</MSBuildAllProjects>
+    <HasSharedItems>true</HasSharedItems>
+    <SharedGUID>d083989d-077c-4dce-8f06-3a8f80757dc8</SharedGUID>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration">
+    <Import_RootNamespace>N2SpriteFont.Shared</Import_RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)N2FontFile.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)N2FontGlyph.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)N2FontTile.vb" />
+    <Compile Include="$(MSBuildThisFileDirectory)N2SpriteFont.vb" />
+  </ItemGroup>
+</Project>
