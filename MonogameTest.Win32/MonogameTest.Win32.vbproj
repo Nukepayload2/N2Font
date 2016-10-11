@@ -105,6 +105,7 @@
     </Compile>
     <Compile Include="N2FontTile.vb" />
     <Compile Include="Program.vb" />
+    <Compile Include="Segoe WP 16 32-127 Basic Latin #FF000000.vb" />
     <Compile Include="SharedGraphicsDevice.vb" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +129,9 @@
     </None>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Assets\SegoeWP16.png" />
   </ItemGroup>
   <Import Project="..\N2SpriteFont.Shared\N2SpriteFont.Shared.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

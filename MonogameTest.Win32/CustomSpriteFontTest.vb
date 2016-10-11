@@ -11,6 +11,9 @@ Public Class CustomSpriteFontTest
     Private graphics As GraphicsDeviceManager
     Private spriteBatch As SpriteBatch
 
+    Dim legacySpriteFont As New SegoeWP1632To127BasicLatinColorFF000000
+    Dim SegoeWP16 As Texture2D
+
     Dim n2SegoeUI As New N2SpriteFont
     Private asm As Assembly
 
@@ -44,7 +47,7 @@ Public Class CustomSpriteFontTest
         ' TODO: use this.Content to load your game content here
 
         n2SegoeUI.Load(Function() asm.GetManifestResourceStream("MonogameTest.Win32.SegoeUI14.n2fnt"))
-
+        SegoeWP16 = Texture2D.FromStream(GraphicsDevice, asm.GetManifestResourceStream("MonogameTest.Win32.SegoeWP16.png"))
     End Sub
 
     ''' <summary>
@@ -89,19 +92,16 @@ Public Class CustomSpriteFontTest
 "中国智造,
 惠及全球。
 123Abcgj+=-_^
+hOi! i'M tEMMIE!
 Draw count: " & drawCount
         Dim mp = Mouse.GetState().Position
         Dim i = mp.X, j = mp.Y
         Dim spacing = 19
 
         For Each ch In str
-            If Char.IsWhiteSpace(ch) Then
-                If ch = vbLf Then
-                    j += spacing
-                    i = mp.X
-                Else
-                    i += spacing
-                End If
+            If ch = vbLf Then
+                j += spacing
+                i = mp.X
             Else
                 Dim charCode = AscW(ch)
                 Dim q1 = charCode And &HFF
@@ -110,13 +110,25 @@ Draw count: " & drawCount
                 Dim glyph = tile.Glyphs(q1)
                 Dim tex = tile.Texture
                 Dim src = New Rectangle(glyph.Left, glyph.Top, glyph.Width, glyph.Height)
-                Dim dest = New Rectangle(i + rnd.Next(-1, 2), j + rnd.Next(-1, 2), spacing, spacing)
+                Dim dest = New Rectangle(i + rnd.Next(-1, 2), j + rnd.Next(-1, 2), glyph.Width, glyph.Height)
                 spriteBatch.Draw(tex, dest, src, Color.White)
-                If AscW(ch) < &H127 Then
-                    i += spacing \ 2
-                Else
-                    i += spacing
-                End If
+                i += glyph.Width + 1
+            End If
+        Next
+
+        Dim leagacyStr = "Nukepayload2UIAbg123Drawing"
+        i = 0
+        j = 0
+        For Each ch In leagacyStr
+            If ch = vbLf Then
+                j += spacing
+                i = 0
+            Else
+                Dim glyph = legacySpriteFont.TryGetGlyph(ch).Value
+                Dim src = New Rectangle(glyph.Left, glyph.Top, glyph.Width, glyph.Height)
+                Dim dest = New Rectangle(i, j + Math.Sin((drawCount - i / 5) / 2), glyph.Width, glyph.Height)
+                spriteBatch.Draw(SegoeWP16, dest, src, Color.White)
+                i += glyph.Width
             End If
         Next
 

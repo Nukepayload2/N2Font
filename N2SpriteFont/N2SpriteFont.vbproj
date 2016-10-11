@@ -32,8 +32,7 @@
     <DebugType>pdbonly</DebugType>
     <DefineDebug>false</DefineDebug>
     <DefineTrace>true</DefineTrace>
-    <DefineConstants>
-    </DefineConstants>
+    <DefineConstants>PCL</DefineConstants>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release</OutputPath>
     <DocumentationFile>N2SpriteFont.xml</DocumentationFile>
