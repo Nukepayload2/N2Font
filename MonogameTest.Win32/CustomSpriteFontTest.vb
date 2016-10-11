@@ -92,7 +92,7 @@ Public Class CustomSpriteFontTest
 "中国智造,
 惠及全球。
 123Abcgj+=-_^
-hOi! i'M tEMMIE!
+hOI!! i'M tEMMIE!
 Draw count: " & drawCount
         Dim mp = Mouse.GetState().Position
         Dim i = mp.X, j = mp.Y
