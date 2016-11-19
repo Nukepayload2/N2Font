@@ -13,7 +13,7 @@ Public Class CustomSpriteFontTest
 
     Dim legacySpriteFont As New SegoeWP1632To127BasicLatinColorFF000000
     Dim SegoeWP16 As Texture2D
-
+    Dim textTexture, textTextureClip As RenderTarget2D
     Dim n2SegoeUI As New N2SpriteFont
     Private asm As Assembly
 
@@ -48,6 +48,10 @@ Public Class CustomSpriteFontTest
 
         n2SegoeUI.Load(Function() asm.GetManifestResourceStream("MonogameTest.Win32.SegoeUI14.n2fnt"))
         SegoeWP16 = Texture2D.FromStream(GraphicsDevice, asm.GetManifestResourceStream("MonogameTest.Win32.SegoeWP16.png"))
+
+        Dim pp = GraphicsDevice.PresentationParameters
+        textTexture = New RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight)
+        textTextureClip = New RenderTarget2D(GraphicsDevice, pp.BackBufferWidth, pp.BackBufferHeight)
     End Sub
 
     ''' <summary>
@@ -56,7 +60,7 @@ Public Class CustomSpriteFontTest
     ''' </summary>
     Protected Overrides Sub UnloadContent()
         ' TODO: Unload any non ContentManager content here
-        n2SegoeUI.Dispose
+        n2SegoeUI.Dispose()
         SharedGraphicsDevice.Current = Nothing
     End Sub
 
@@ -82,11 +86,47 @@ Public Class CustomSpriteFontTest
     ''' </summary>
     ''' <param name="gameTime">Provides a snapshot of timing values.</param>
     Protected Overrides Sub Draw(gameTime As GameTime)
-        GraphicsDevice.Clear(Color.CornflowerBlue)
-
         ' TODO: Add your drawing code here
+        'DrawTextOnDefaultRenderTarget()
+        DrawTextOnCustomRenderTarget()
+        MyBase.Draw(gameTime)
+    End Sub
+    Private Sub DrawTextOnCustomRenderTarget()
+        Dim spacing = 19
+        Dim mp = Mouse.GetState().Position
+        Dim pp = GraphicsDevice.PresentationParameters
+
+        GraphicsDevice.SetRenderTarget(textTexture)
+        GraphicsDevice.Clear(Color.Transparent)
+        spriteBatch.Begin()
+        DrawTemmieText(spacing)
+        DrawSinText(spacing)
+        spriteBatch.End()
+
+        GraphicsDevice.SetRenderTarget(textTextureClip)
+        GraphicsDevice.Clear(Color.Transparent)
+        spriteBatch.Begin()
+        spriteBatch.Draw(textTexture, New Rectangle(mp.X, mp.Y, pp.BackBufferWidth, pp.BackBufferHeight), Color.Black)
+        spriteBatch.End()
+
+        GraphicsDevice.SetRenderTarget(Nothing)
+        GraphicsDevice.Clear(Color.White)
+        spriteBatch.Begin()
+        spriteBatch.Draw(textTextureClip, New Rectangle(mp.X, mp.Y, pp.BackBufferWidth, pp.BackBufferHeight), Color.White)
+        spriteBatch.End()
+    End Sub
+    Private Sub DrawTextOnDefaultRenderTarget()
+        GraphicsDevice.SetRenderTarget(Nothing)
         spriteBatch.Begin()
 
+        Dim spacing = 19
+        DrawTemmieText(spacing)
+        DrawSinText(spacing)
+
+        spriteBatch.End()
+    End Sub
+
+    Private Sub DrawTemmieText(spacing As Integer)
         drawCount += 1
         Dim str =
 "中国智造,
@@ -95,8 +135,8 @@ Public Class CustomSpriteFontTest
 hOI!! i'M tEMMIE!
 Draw count: " & drawCount
         Dim mp = Mouse.GetState().Position
-        Dim i = mp.X, j = mp.Y
-        Dim spacing = 19
+        Dim i = mp.X
+        Dim j = mp.Y
 
         For Each ch In str
             If ch = vbLf Then
@@ -115,10 +155,11 @@ Draw count: " & drawCount
                 i += glyph.Width + 1
             End If
         Next
+    End Sub
 
+    Private Sub DrawSinText(spacing As Integer)
         Dim leagacyStr = "Nukepayload2UIAbg123Drawing"
-        i = 0
-        j = 0
+        Dim i = 0, j = 0
         For Each ch In leagacyStr
             If ch = vbLf Then
                 j += spacing
@@ -131,9 +172,5 @@ Draw count: " & drawCount
                 i += glyph.Width
             End If
         Next
-
-        spriteBatch.End()
-        MyBase.Draw(gameTime)
     End Sub
-
 End Class
